@@ -1,12 +1,25 @@
 @import "var.less";
-*{
-  box-sizing: border-box;
+
+//栅格化核心代码
+
+.loop(@type:s,@i:1) when(@i<=@cols){
+    .container>.row>.col-@{type}-@{i}{
+      float:left;
+      width:@i/@cols*100%;
+   }
+  .container-fluid>.row>.col-@{type}-@{i}{
+    float:left;
+    width:@i/@cols*100%;
+  }
+  .loop(@type,@i+1);
 }
-/*小屏的时候*/
+
+
+/*小屏*/
 .container{
   &{
-     width:@num1*1;
-     margin: auto;
+    width:@num1*1;
+    margin: auto;
   }
   &>.row{
     width:100%;
@@ -19,23 +32,18 @@
     width:100%;
     .clear;
   }
-
+  &>.row>.col-s-hide{
+    display: none;
+  }
 }
-/*最小屏*/
-
-.loop();
-.col-s-hide{
-  display: none;
-}
+.loop(s);
 
 /*中屏*/
-
-@media screen and (min-width: @num1){
+@media screen and (min-width:@num2){
   .container{
-      width:@num1;
-      margin: auto;
-    }
- .loop(m);
+    width:@num2;
+  }
+  .loop(m);
   .col-s-hide{
     display: block;
   }
@@ -48,40 +56,27 @@
 }
 
 /*大屏*/
-@media screen and (min-width: @num2){
+
+@media screen and (min-width:@num1){
   .container{
     width:@num2;
-    margin: auto;
   }
   .loop(l);
   .col-s-hide{
     display: block;
   }
-  .col-m-hide{
-    display: block;
-  }
   .col-l-hide{
     display: none;
   }
-}
-//栅格化的核心代码
-.loop(@type:s,@i:1) when (@i<=@cols){
-  .container>.row>.col-@{type}-@{i}{
-    float:left;
-    width:@i/@cols*100%;
+  .col-m-hide{
+    display: block;
   }
-  .container-fluid>.row>.col-@{type}-@{i}{
-    float:left;
-    width:@i/@cols*100%;
-  }
-  .loop(@type,@i+1);
 }
-
 
 /*清除浮动*/
 .clear(){
-  &:before,&:after{
-    content: "";
+  &:after,&:before{
+    content:"";
     display: block;
   }
   &:after{
